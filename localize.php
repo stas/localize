@@ -121,10 +121,10 @@ class Localize {
      * @return Boolean, false on failre and true on success
      */
     function update_po() {
-        $repo = 'http://translate.wordpress.org/projects/wp/%s/%s/default/export-translations?export-format=po';
+        $repo = 'http://translate.wordpress.org/projects/wp/%s/%s/default/export-translations?export-format=mo';
         $languages_dir = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR;
         $settings = self::get_locale();
-        $po_path = $languages_dir . $settings['lang'] . '.po';
+        $po_path = $languages_dir . $settings['lang'] . '.mo';
         
         if( file_exists( $po_path ) )
             return true;
@@ -132,13 +132,20 @@ class Localize {
         if( !is_dir( $languages_dir ) )
             @mkdir( $languages_dir, 0755, true );
         
-        $locale = explode( '_', $settings['lang'] );
-        if( $settings['lang_version'] == 'stable' )
-            $version = '3.0.x';
-        else
-            $version = 'dev';
+        $versions = self::get_versions();
+        if( !is_array( $versions ) )
+            return;
         
-        $po_uri = sprintf( $repo, $version, $locale[0] );
+        if( $settings['lang_version'] == 'dev' )
+            $version = reset( $versions );
+        else
+            $version = end( $versions );
+        
+        $locale = self::get_locale_data( $settings['lang'], $version );
+        if( !is_array( $locale ) )
+            return;
+        
+        $po_uri = sprintf( $repo, $version, $locale[1] );
         $tmp_po = download_url( $po_uri );
         
         if ( is_wp_error($tmp_po) ) {
@@ -148,6 +155,64 @@ class Localize {
         
         if( @copy( $tmp_po, $po_path ))
             return @unlink( $tmp_po );
+    }
+    
+    /**
+     * fetch_glotpress()
+     *
+     * Uses GlotPress api to get the repository details
+     * @return Mixed, decoded json from api, or false on failure
+     */
+    function fetch_glotpress( $args = '' ) {
+        global $wp_version;
+        
+        $api = "http://translate.wordpress.org/api/projects/wp/";
+        $request = new WP_Http;
+        
+        $request_args = array(
+            'timeout' => 30,
+            'user-agent' => 'WordPress/' . $wp_version . '; Localize/' . LOCALIZE . '; ' . get_bloginfo( 'url' )
+        );
+        
+        $response = $request->request( $api . $args, $request_args);
+        if( !is_wp_error( $response ) )
+            return json_decode( $response['body'] );
+        else
+            return;
+    }
+    
+    /**
+     * get_versions()
+     *
+     * Extracts the repository versions from GlotPress api
+     * @return Mixed, an array of `name -> slug` versions
+     */
+    function get_versions() {
+        $versions = null;
+        
+        $repo_info = self::fetch_glotpress();
+        if( is_object( $repo_info ) && isset( $repo_info->sub_projects ))
+            foreach( $repo_info->sub_projects as $p )
+                $versions[$p->name] = $p->slug;
+        
+        return $versions;
+    }
+    
+    /**
+     * get_locale_data( $locale, $version )
+     *
+     * Extracts the locale data from GlotPress api
+     * @param String $locale, the locale you want to get data about. Ex.: ru_RU
+     * @param String $version, the GlotPress version slug
+     * @return Mixed, an array of `name -> locale_slug` format
+     */
+    function get_locale_data( $locale, $version ) {
+        $locales_info = self::fetch_glotpress( $version );
+        if( is_object( $locales_info ) && isset( $locales_info->translation_sets ))
+            foreach( $locales_info->translation_sets as $t )
+                if( strstr( $locale, $t->locale ) )
+                    return array( $t->name, $t->locale);
+        return;
     }
     
     /**
