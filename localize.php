@@ -3,7 +3,7 @@
 Plugin Name: Localize WordPress
 Plugin URI: https://github.com/stas/localize
 Description: Easily switch to any localization from GlotPress
-Version: 0.2
+Version: 0.3
 Author: Stas Sușcov
 Author URI: http://stas.nerd.ro/
 */
@@ -26,7 +26,7 @@ Author URI: http://stas.nerd.ro/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define( 'LOCALIZE', '0.1' );
+define( 'LOCALIZE', '0.3' );
 
 class Localize {
     /**
@@ -99,7 +99,7 @@ class Localize {
             if( !$locale )
                 $flash = __( 'There was an error downloading the file!','localize' );
             else
-                $flash = $locale . __( ' localization updated! Please reload this page...','localize' );
+                $flash = sprintf( __( '%s localization updated! Please reload this page...', 'localize' ), $locale );
         }
         
         $vars = self::get_locale();
