@@ -1,0 +1,102 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Localize\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-30 23:00+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Stas Sușcov <stas@softwareliber.ro>\n"
+"Language-Team: WordPress Polyglots <stas@nerd.ro>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Romanian\n"
+"X-Poedit-Country: ROMANIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../localize.php:58
+#: ../localize.php:59
+msgid "Localization"
+msgstr "Localizare"
+
+#: ../localize.php:92
+msgid "Sorry, the <code>wp-config.php</code> could not be updated..."
+msgstr "Din păcate, fișierul <code>wp-config.php</code> nu s-a putut actualiza..."
+
+#: ../localize.php:100
+msgid "There was an error downloading the file!"
+msgstr "A intervenit o eroare la descărcarea fișierului!"
+
+#: ../localize.php:102
+#, php-format
+msgid "%s localization updated! Please reload this page..."
+msgstr "Traducerea %s a fost actualizată! Reîncarcă pagina..."
+
+#: ../templates/settings.php:8
+msgid "Localize WordPress"
+msgstr "Localizare pentru WordPress"
+
+#: ../templates/settings.php:11
+msgid "Introduction"
+msgstr "Descriere"
+
+#: ../templates/settings.php:13
+msgid "This plugin will help you enable localization for your language on this WordPress installation."
+msgstr "Acest modul va simplifica instalarea localizărilor WordPress pentru limba preferată."
+
+#: ../templates/settings.php:14
+msgid "All you need to do is select the language code from the list below, and the version you want to use."
+msgstr "Pentru a începe, selectează codul localizării din lista de mai jos, și versiunea acesteia care va fi folosită."
+
+#: ../templates/settings.php:15
+msgid "The <strong>stable version</strong> will load the file from already published translations."
+msgstr "<strong>Versiunea stabilă</strong> va încărca fișierul cu localizarea deja publicată."
+
+#: ../templates/settings.php:17
+msgid "The <strong>development version</strong> will try to download the file directly from "
+msgstr "<strong>Versiunea în dezvoltare</strong> va încerca să descarce fișierul direct din "
+
+#: ../templates/settings.php:24
+msgid "Options"
+msgstr "Opțiuni"
+
+#: ../templates/settings.php:26
+msgid "Please select your language and it's version:"
+msgstr "Alege limba și versiunea localizării:"
+
+#: ../templates/settings.php:30
+msgid "Localization Code"
+msgstr "Codul localizării"
+
+#: ../templates/settings.php:32
+msgid "The localization code is composed of two letters language code, an underscore and two letters country code."
+msgstr "Codul localizării este compus din două litere a limbii folosite, o liniuță (_) și două litere a țării."
+
+#: ../templates/settings.php:34
+msgid "Follow these links to find out your localization code: "
+msgstr "Următoarele pagini pot fi accesate pentru a afla codul localizării:"
+
+#: ../templates/settings.php:36
+msgid "Language Codes List"
+msgstr "Lista cu codurile limbii"
+
+#: ../templates/settings.php:39
+msgid "Country Codes List"
+msgstr "Lista cu codurile țărilor"
+
+#: ../templates/settings.php:43
+msgid "Localization Version"
+msgstr "Versiunea localizării"
+
+#: ../templates/settings.php:45
+msgid "Stable"
+msgstr "Stabilă"
+
+#: ../templates/settings.php:46
+msgid "Development"
+msgstr "În dezvoltare"
+
+#: ../templates/settings.php:50
+msgid "Save Changes"
+msgstr "Salvează"
+

@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Localize\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-30 23:00+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Stas Sușcov <stas@softwareliber.ro>\n"
+"Language-Team: WordPress Polyglots <stas@nerd.ro>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../localize.php:58
+#: ../localize.php:59
+msgid "Localization"
+msgstr ""
+
+#: ../localize.php:92
+msgid "Sorry, the <code>wp-config.php</code> could not be updated..."
+msgstr ""
+
+#: ../localize.php:100
+msgid "There was an error downloading the file!"
+msgstr ""
+
+#: ../localize.php:102
+#, php-format
+msgid "%s localization updated! Please reload this page..."
+msgstr ""
+
+#: ../templates/settings.php:8
+#, fuzzy
+msgid "Localize WordPress"
+msgstr "Șablonul implicit WordPress"
+
+#: ../templates/settings.php:11
+msgid "Introduction"
+msgstr ""
+
+#: ../templates/settings.php:13
+msgid "This plugin will help you enable localization for your language on this WordPress installation."
+msgstr ""
+
+#: ../templates/settings.php:14
+msgid "All you need to do is select the language code from the list below, and the version you want to use."
+msgstr ""
+
+#: ../templates/settings.php:15
+msgid "The <strong>stable version</strong> will load the file from already published translations."
+msgstr ""
+
+#: ../templates/settings.php:17
+msgid "The <strong>development version</strong> will try to download the file directly from "
+msgstr ""
+
+#: ../templates/settings.php:24
+#, fuzzy
+msgid "Options"
+msgstr "Opțiuni"
+
+#: ../templates/settings.php:26
+msgid "Please select your language and it's version:"
+msgstr ""
+
+#: ../templates/settings.php:30
+#, fuzzy
+msgid "Localization Code"
+msgstr "Înserează cod"
+
+#: ../templates/settings.php:32
+msgid "The localization code is composed of two letters language code, an underscore and two letters country code."
+msgstr ""
+
+#: ../templates/settings.php:34
+msgid "Follow these links to find out your localization code: "
+msgstr ""
+
+#: ../templates/settings.php:36
+#, fuzzy
+msgid "Language Codes List"
+msgstr "Sfârșit prematur al listei"
+
+#: ../templates/settings.php:39
+#, fuzzy
+msgid "Country Codes List"
+msgstr "Sfârșit prematur al listei"
+
+#: ../templates/settings.php:43
+#, fuzzy
+msgid "Localization Version"
+msgstr "Versiune software"
+
+#: ../templates/settings.php:45
+msgid "Stable"
+msgstr ""
+
+#: ../templates/settings.php:46
+#, fuzzy
+msgid "Development"
+msgstr "Blogul de dezvoltare WordPress"
+
+#: ../templates/settings.php:50
+#, fuzzy
+msgid "Save Changes"
+msgstr "Salvează"
+

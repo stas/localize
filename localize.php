@@ -45,7 +45,7 @@ class Localize {
      * i18n
      */
     function localization() {
-        load_plugin_textdomain( 'localize', false, basename( dirname( __FILE__ ) ) . 'languages' );
+        load_plugin_textdomain( 'localize', false, basename( dirname( __FILE__ ) ) . '/languages' );
     }
     
     /**
