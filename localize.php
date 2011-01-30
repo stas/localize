@@ -36,7 +36,6 @@ class Localize {
      */
     function init() {
         add_action( 'admin_menu', array( __CLASS__, 'page' ) );
-        add_filter( 'gettext', array( __CLASS__, 'transalte' ) );
         add_action( 'init', array( __CLASS__, 'localization' ) );
     }
 
@@ -75,6 +74,7 @@ class Localize {
         if( isset( $_POST['localize_nonce'] ) && wp_verify_nonce( $_POST['localize_nonce'], 'localize' ) ) {
             $lang = null;
             $lang_version = null;
+            $locale = null;
             
             if( isset( $_POST['lang'] ) && !empty( $_POST['lang'] ) )
                 $lang = sanitize_text_field( $_POST['lang'] );
@@ -88,12 +88,18 @@ class Localize {
             if( $lang_version && in_array( $lang_version, array( 'stable', 'dev' ) ) )
                 update_option( 'localize_lang_version', $lang_version );
             
-            if( self::update_config() )
-                $flash = __( 'Localization updated! Please reload this page...','localize' );
+            if( !self::update_config() )
+                $flash = __( "Sorry, the <code>wp-config.php</code> could not be updated...", 'localize' );
             
             if( $lang != 'en_US' )
-                if( !self::update_po() )
-                    $flash = __( 'There was an error downloading the file!','localize' );
+                $locale = self::update_mo();
+            else
+                $locale = "English";
+            
+            if( !$locale )
+                $flash = __( 'There was an error downloading the file!','localize' );
+            else
+                $flash = $locale . __( ' localization updated! Please reload this page...','localize' );
         }
         
         $vars = self::get_locale();
@@ -115,19 +121,16 @@ class Localize {
     }
     
     /**
-     * update_po()
+     * update_mo()
      *
      * Updates the po file from WordPress.org GlotPress repo
-     * @return Boolean, false on failre and true on success
+     * @return String, the name of the updated locale
      */
-    function update_po() {
-        $repo = 'http://translate.wordpress.org/projects/wp/%s/%s/default/export-translations?export-format=mo';
+    function update_mo() {
+        $repo = 'http://translate.wordpress.org/projects/wp/%s/%s/default/export-translations?format=mo';
         $languages_dir = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR;
         $settings = self::get_locale();
         $po_path = $languages_dir . $settings['lang'] . '.mo';
-        
-        if( file_exists( $po_path ) )
-            return true;
         
         if( !is_dir( $languages_dir ) )
             @mkdir( $languages_dir, 0755, true );
@@ -154,7 +157,8 @@ class Localize {
         }
         
         if( @copy( $tmp_po, $po_path ))
-            return @unlink( $tmp_po );
+            if( @unlink( $tmp_po ) )
+                return $locale[0];
     }
     
     /**
@@ -216,25 +220,6 @@ class Localize {
     }
     
     /**
-     * translate( $translate )
-     *
-     * Hooks into `gettext` filter to overwrite existing/lacking translations using new po file
-     * @param String $translate, the string that has to be translated
-     * @return String, the translated result
-     */
-    function transalte( $translate = null ) {
-        $settings = self::get_locale();
-        $locale = $settings['lang'];
-        
-        $new_locales = self::load_po( $locale );
-        
-        if( is_array( $new_locales ) && key_exists( $translate, $new_locales ) )
-            return $new_locales[$translate];
-        else
-            return $translate;
-    }
-    
-    /**
      * update_config()
      *
      * Updates the `wp-config.php` file using new locale
@@ -262,40 +247,6 @@ class Localize {
         flock( $wpc_h, LOCK_UN );
         
         return true;
-    }
-    
-    /**
-     * load_po( $lang )
-     *
-     * Loads the po file strings into memory
-     * @url: http://www.rogerdudler.com/?p=342
-     * @param String $lang, the locale of the po file
-     * @return Mixed array of translations as original -> translated
-     */
-    function load_po( $lang ) {
-        global $localize;
-        $po_file = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR . $lang . '.po';
-        if( !file_exists( $po_file ) )
-            return;
-        
-        if( $localize && isset( $localize[$lang] ))
-            return $localize[$lang];
-        
-        $translations = array();
-        $po = file( $po_file );
-        $current = null;
-        foreach ( $po as $line ) {
-            if ( substr($line,0,5) == 'msgid' ) {
-                $current = trim( substr( trim( substr( $line,5 ) ),1,-1 ));
-            }
-            if ( substr( $line,0,6 ) == 'msgstr' ) {
-                $translations[$current] = trim( substr( trim( substr( $line,6 ) ),1,-1 ));
-            }
-        }
-        
-        $localize[$lang] = $translations;
-        
-        return $localize[$lang];
     }
     
     /**

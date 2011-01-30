@@ -12,15 +12,7 @@
             <div class="inside">
                 <p><?php _e( 'This plugin will help you enable localization for your language on this WordPress installation.','localize' ); ?></p>
                 <p><?php _e( 'All you need to do is select the language code from the list below, and the version you want to use.','localize' ); ?></p>
-                <p>
-                    <?php _e( 'The <strong>stable version</strong> will load the file from already published translations.','localize' ); ?>
-                    <u>
-                        <?php _e( "For an optimized setup you need to manually update your WordPress installation using new locale!",'localize' )?>
-                    </u>
-                </p>
-                <p>
-                    <a class="button" href="<?php echo get_admin_url( null, 'update-core.php' ); ?>"><?php _e( 'Visit Updates Page','localize' )?> &rarr;</a>
-                </p>
+                <p><?php _e( 'The <strong>stable version</strong> will load the file from already published translations.','localize' ); ?></p>
                 <p>
                     <?php _e( 'The <strong>development version</strong> will try to download the file directly from ','localize' ); ?>
                     <a href="http://translate.wordpress.org/">GlotPress (translate.wordpress.org)</a>.
@@ -55,7 +47,7 @@
                         </select>
                     </p>
                     <p>
-                        <input type="submit" class="button-primary" value="<?php _e( 'Submit','localize' )?>"/>
+                        <input type="submit" class="button-primary" value="<?php _e( 'Save Changes' )?>"/>
                     </p>
                 </form>
             </div>
