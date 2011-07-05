@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Localize WordPress
-Plugin URI: http://stas.github.com/localize/
+Plugin URI: https://github.com/stas/localize
 Description: Easily switch to any localization from GlotPress
-Version: 0.3
+Version: 0.4
 Author: Stas Sușcov
 Author URI: http://stas.nerd.ro/
 */
@@ -26,7 +26,8 @@ Author URI: http://stas.nerd.ro/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define( 'LOCALIZE', '0.3' );
+define( 'LOCALIZE', '0.4' );
+define( 'LOCALIZE_CACHE', '360' );
 
 class Localize {
     /**
@@ -80,12 +81,12 @@ class Localize {
                 $lang = sanitize_text_field( $_POST['lang'] );
             
             if( isset( $_POST['lang_version'] ) && !empty( $_POST['lang_version'] ) )
-                $lang_version = sanitize_key( $_POST['lang_version'] );
+                $lang_version = sanitize_text_field( $_POST['lang_version'] );
             
             if( $lang && strstr( $lang, '_' ) )
                 update_option( 'localize_lang', $lang );
             
-            if( $lang_version && in_array( $lang_version, array( 'stable', 'dev' ) ) )
+            if( $lang_version )
                 update_option( 'localize_lang_version', $lang_version );
             
             if( !self::update_config() )
@@ -103,6 +104,7 @@ class Localize {
         }
         
         $vars = self::get_locale();
+        $vars['versions'] = self::get_versions();
         $vars['flash'] = $flash;
         self::render( 'settings', $vars );
     }
@@ -139,16 +141,14 @@ class Localize {
         if( !is_array( $versions ) )
             return;
         
-        if( $settings['lang_version'] == 'dev' )
-            $version = reset( $versions );
-        else
-            $version = end( $versions );
+        if( !in_array( $settings['lang_version'], $versions ) )
+            return;
         
-        $locale = self::get_locale_data( $settings['lang'], $version );
+        $locale = self::get_locale_data( $settings['lang'], $settings['lang_version'] );
         if( !is_array( $locale ) )
             return;
         
-        $po_uri = sprintf( $repo, $version, $locale[1] );
+        $po_uri = sprintf( $repo, $settings['lang_version'], $locale[1] );
         $tmp_po = download_url( $po_uri );
         
         if ( is_wp_error($tmp_po) ) {
@@ -192,13 +192,17 @@ class Localize {
      * @return Mixed, an array of `name -> slug` versions
      */
     function get_versions() {
-        $versions = null;
+        $versions = get_transient( "localize_versions" );
+        
+        if( !empty( $versions ) )
+            return $versions;
         
         $repo_info = self::fetch_glotpress();
         if( is_object( $repo_info ) && isset( $repo_info->sub_projects ))
             foreach( $repo_info->sub_projects as $p )
                 $versions[$p->name] = $p->slug;
         
+        set_transient( "localize_versions", $versions, LOCALIZE_CACHE );
         return $versions;
     }
     
@@ -211,11 +215,19 @@ class Localize {
      * @return Mixed, an array of `name -> locale_slug` format
      */
     function get_locale_data( $locale, $version ) {
+        $locales_info = get_transient( "localize_locale_data" );
+        
+        if( !empty( $locales_info ) )
+            return $locales_info;
+        
         $locales_info = self::fetch_glotpress( $version );
         if( is_object( $locales_info ) && isset( $locales_info->translation_sets ))
             foreach( $locales_info->translation_sets as $t )
-                if( strstr( $locale, $t->locale ) )
+                if( strstr( $locale, $t->locale ) ) {
+                    set_transient( "localize_locale_data", array( $t->name, $t->locale), LOCALIZE_CACHE );
                     return array( $t->name, $t->locale);
+                }
+        
         return;
     }
     

@@ -30,7 +30,8 @@
                         <label for="lang"><?php _e( 'Localization Code','localize' )?></label>
                         <input id="lang" name="lang" type="text" style="width: 100px;" value="<?php echo $lang ?>"/>
                         <?php _e( 'The localization code is composed of two letters language code, an underscore and two letters country code.','localize' ); ?>
-                        <br />
+                    </p>
+                    <p>
                         <?php _e( 'Follow these links to find out your localization code: ','localize' ); ?>
                         <a href="http://www.gnu.org/software/hello/manual/gettext/Usual-Language-Codes.html">
                             <?php _e( 'Language Codes List','localize' ); ?>
@@ -42,8 +43,15 @@
                     <p class="form-field">
                         <label for="lang_version"><?php _e( 'Localization Version','localize' ); ?></label>
                         <select id="lang_version" name="lang_version">
-                            <option value="stable" <?php selected( $lang_version == 'stable' ); ?>><?php _e( 'Stable','localize' )?></option>
-                            <option value="dev" <?php selected( $lang_version == 'dev' ); ?>><?php _e( 'Development','localize' )?></option>
+                            <?php if ( empty( $versions ) ) : ?>
+                                <option value=""><?php _e( 'None available','localize' ); ?></option>
+                            <?php else: ?>
+                                <?php foreach ( $versions as $name => $slug ): ?>
+                                    <option value="<?php echo esc_attr( $slug ); ?>" <?php selected( esc_attr( $slug ), $lang_version ); ?> ><?php
+                                        echo esc_html( $name );
+                                    ?></option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </select>
                     </p>
                     <p>

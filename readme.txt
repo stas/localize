@@ -2,8 +2,8 @@
 Contributors: sushkov
 Tags: locale, switch, localization, translations, glotpress
 Requires at least: WordPress 2.9
-Tested up to: WordPress 3.1
-Stable tag: 0.3
+Tested up to: WordPress 3.2
+Stable tag: 0.4
 Donate link: http://stas.nerd.ro/pub/donate/
 
 Easily switch to any localization from GlotPress
@@ -21,7 +21,7 @@ Some of the features:
 * Can switch between versions. Available: stable and dev
 * Uses GlotPress api!
 
-Screenshot: [1](http://i.imgur.com/lBZmk.png)
+[vimeo http://vimeo.com/19433386]
 
 
 == Installation ==
@@ -35,6 +35,10 @@ Please report bugs on [plugin page issues tracker](https://github.com/stas/local
 
 
 == Changelog ==
+
+= 0.4 =
+* Added support for multiple versions, all available from GlotPress
+* Added some caching for API data (see `LOCALIZE_CACHE`)
 
 = 0.3 =
 * Fixed an incomplete translation string
