@@ -32,7 +32,7 @@ define( 'LOCALIZE_CACHE', '360' );
 class Localize {
     /**
      * init()
-     * 
+     *
      * Sets the hooks and other initialization stuff
      */
     function init() {
@@ -42,16 +42,16 @@ class Localize {
 
     /**
      * localization()
-     * 
+     *
      * i18n
      */
     function localization() {
         load_plugin_textdomain( 'localize', false, basename( dirname( __FILE__ ) ) . '/languages' );
     }
-    
+
     /**
      * page()
-     * 
+     *
      * Adds the options page to existing menu
      */
     function page() {
@@ -63,52 +63,52 @@ class Localize {
             array( __CLASS__, 'page_body' )
         );
     }
-    
+
     /**
      * page()
-     * 
+     *
      * Callback to render the options page and handle it's form
      */
     function page_body() {
         $flash = null;
-        
+
         if( isset( $_POST['localize_nonce'] ) && wp_verify_nonce( $_POST['localize_nonce'], 'localize' ) ) {
             $lang = null;
             $lang_version = null;
             $locale = null;
-            
+
             if( isset( $_POST['lang'] ) && !empty( $_POST['lang'] ) )
                 $lang = sanitize_text_field( $_POST['lang'] );
-            
+
             if( isset( $_POST['lang_version'] ) && !empty( $_POST['lang_version'] ) )
                 $lang_version = sanitize_text_field( $_POST['lang_version'] );
-            
+
             if( $lang && strstr( $lang, '_' ) )
                 update_option( 'localize_lang', $lang );
-            
+
             if( $lang_version )
                 update_option( 'localize_lang_version', $lang_version );
-            
+
             if( !self::update_config() )
                 $flash = __( "Sorry, the <code>wp-config.php</code> could not be updated...", 'localize' );
-            
+
             if( $lang != 'en_US' )
                 $locale = self::update_mo();
             else
                 $locale = "English";
-            
+
             if( !$locale )
                 $flash = __( 'There was an error downloading the file!','localize' );
             else
                 $flash = sprintf( __( '%s localization updated! Please reload this page...', 'localize' ), $locale );
         }
-        
+
         $vars = self::get_locale();
         $vars['versions'] = self::get_versions();
         $vars['flash'] = $flash;
         self::render( 'settings', $vars );
     }
-    
+
     /**
      * get_locale()
      *
@@ -121,7 +121,7 @@ class Localize {
             'lang_version' => get_option( 'localize_lang_version', 'stable' )
         );
     }
-    
+
     /**
      * update_mo()
      *
@@ -133,34 +133,34 @@ class Localize {
         $languages_dir = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR;
         $settings = self::get_locale();
         $po_path = $languages_dir . $settings['lang'] . '.mo';
-        
+
         if( !is_dir( $languages_dir ) )
             @mkdir( $languages_dir, 0755, true );
-        
+
         $versions = self::get_versions();
         if( !is_array( $versions ) )
             return;
-        
+
         if( !in_array( $settings['lang_version'], $versions ) )
             return;
-        
+
         $locale = self::get_locale_data( $settings['lang'], $settings['lang_version'] );
         if( !is_array( $locale ) )
             return;
-        
+
         $po_uri = sprintf( $repo, $settings['lang_version'], $locale[1] );
         $tmp_po = download_url( $po_uri );
-        
+
         if ( is_wp_error($tmp_po) ) {
             @unlink( $tmp_po );
             return false;
         }
-        
+
         if( @copy( $tmp_po, $po_path ))
             if( @unlink( $tmp_po ) )
                 return $locale[0];
     }
-    
+
     /**
      * fetch_glotpress()
      *
@@ -169,22 +169,22 @@ class Localize {
      */
     function fetch_glotpress( $args = '' ) {
         global $wp_version;
-        
+
         $api = "http://translate.wordpress.org/api/projects/wp/";
         $request = new WP_Http;
-        
+
         $request_args = array(
             'timeout' => 30,
             'user-agent' => 'WordPress/' . $wp_version . '; Localize/' . LOCALIZE . '; ' . get_bloginfo( 'url' )
         );
-        
+
         $response = $request->request( $api . $args, $request_args);
         if( !is_wp_error( $response ) )
             return json_decode( $response['body'] );
         else
             return;
     }
-    
+
     /**
      * get_versions()
      *
@@ -193,19 +193,19 @@ class Localize {
      */
     function get_versions() {
         $versions = get_transient( "localize_versions" );
-        
+
         if( !empty( $versions ) )
             return $versions;
-        
+
         $repo_info = self::fetch_glotpress();
         if( is_object( $repo_info ) && isset( $repo_info->sub_projects ))
             foreach( $repo_info->sub_projects as $p )
                 $versions[$p->name] = $p->slug;
-        
+
         set_transient( "localize_versions", $versions, LOCALIZE_CACHE );
         return $versions;
     }
-    
+
     /**
      * get_locale_data( $locale, $version )
      *
@@ -216,10 +216,10 @@ class Localize {
      */
     function get_locale_data( $locale, $version ) {
         $locales_info = get_transient( "localize_locale_data" );
-        
+
         if( !empty( $locales_info ) )
             return $locales_info;
-        
+
         $locales_info = self::fetch_glotpress( $version );
         if( is_object( $locales_info ) && isset( $locales_info->translation_sets ))
             foreach( $locales_info->translation_sets as $t )
@@ -227,10 +227,10 @@ class Localize {
                     set_transient( "localize_locale_data", array( $t->name, $t->locale), LOCALIZE_CACHE );
                     return array( $t->name, $t->locale);
                 }
-        
+
         return;
     }
-    
+
     /**
      * update_config()
      *
@@ -240,27 +240,27 @@ class Localize {
     function update_config() {
         $wp_config_path = ABSPATH . 'wp-config.php';
         $wpc_h = fopen( $wp_config_path, "r+" );
-        
+
         $content = stream_get_contents( $wpc_h );
         if( !$content && !flock( $wpc_h, LOCK_EX ) )
             return false;
-        
+
         $settings = self::get_locale();
         $locale = $settings['lang'];
-        
+
         $source = "/define(.*)WPLANG(.*)\'(.*)\'(.*);(.*)/";
         $target = "define ('WPLANG', '$locale'); // Updated by `Localize` plugin";
-        
+
         $content = preg_replace( $source, $target, $content );
-        
+
         rewind( $wpc_h );
         if( !@fwrite( $wpc_h, $content ) )
             return false;
         flock( $wpc_h, LOCK_UN );
-        
+
         return true;
     }
-    
+
     /**
      * render( $name, $vars = null, $echo = true )
      *
@@ -274,11 +274,11 @@ class Localize {
         ob_start();
         if( !empty( $vars ) )
             extract( $vars );
-        
+
         include dirname( __FILE__ ) . '/templates/' . $name . '.php';
-        
+
         $data = ob_get_clean();
-        
+
         if( $echo )
             echo $data;
         else
