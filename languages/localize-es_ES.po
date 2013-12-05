@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Localize WordPress v0.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-11-26 19:40:50+0000\n"
+"PO-Revision-Date: 2013-12-04 18:45:42+0000\n"
 "Last-Translator: juanjo <administrador@juanjoresa.es>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: localize.php:60
 #@ localize
 msgid "Localization"
-msgstr "Emplazamiento"
+msgstr "Localize WP"
 
 #: localize.php:93
 #@ localize
@@ -55,12 +55,12 @@ msgstr "Introducción"
 #: templates/settings.php:13
 #@ localize
 msgid "This plugin will help you enable localization for your language on this WordPress installation."
-msgstr "Este plugin te ayudará a activar la posición para su idioma en esta instalación de WordPress."
+msgstr "Este plugin le ayudará a activar la posición para su idioma en esta instalación de WordPress."
 
 #: templates/settings.php:14
 #@ localize
 msgid "All you need to do is select the language code from the list below, and the version you want to use."
-msgstr "Todo lo que necesitas hacer es seleccionar el código de idioma de la lista siguiente, y la versión que desea utilizar."
+msgstr "Todo lo que necesita hacer es seleccionar el código de idioma de la siguiente lista y la versión que desea utilizar."
 
 #: templates/settings.php:15
 #@ localize
@@ -90,7 +90,7 @@ msgstr "Código de localización"
 #: templates/settings.php:32
 #@ localize
 msgid "The localization code is composed of two letters language code, an underscore and two letters country code."
-msgstr "El código de localización está compuesto por el código de dos letras del lenguaje, un guión bajo y el código de dos letras del país. Ejemplo: es_ES para el Español"
+msgstr "El código de localización está compuesto por el código de dos letras del idioma, un guión bajo y el código de dos letras del país. Ejemplo: es_ES para el Español."
 
 #: templates/settings.php:35
 #@ localize
@@ -100,7 +100,7 @@ msgstr "Siga estos enlaces para obtener el código de localización:"
 #: templates/settings.php:37
 #@ localize
 msgid "Language Codes List"
-msgstr "Lista de códigos de idiomas"
+msgstr "Lista de códigos de Idiomas"
 
 #: templates/settings.php:40
 #@ localize
@@ -110,7 +110,7 @@ msgstr "Lista de códigos de Paises"
 #: templates/settings.php:44
 #@ localize
 msgid "Localization Version"
-msgstr "Versión Localization"
+msgstr "Versión WordPress"
 
 #: templates/settings.php:47
 #@ localize
@@ -120,5 +120,5 @@ msgstr "No disponible"
 #: templates/settings.php:58
 #@ default
 msgid "Save Changes"
-msgstr ""
+msgstr "Guardar Cambios"
 
